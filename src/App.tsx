@@ -46,9 +46,10 @@ export default function App() {
         )}
       </AnimatePresence>
 
-      <Navbar
-        onMenuClick={() => setIsSidebarOpen(true)}
+      <Navbar 
+        onMenuClick={() => setIsSidebarOpen(true)} 
         view={currentView}
+        setView={setCurrentView}
         onBack={() => setCurrentView('home')}
       />
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />

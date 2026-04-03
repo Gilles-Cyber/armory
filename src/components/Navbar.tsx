@@ -1,50 +1,94 @@
-import { Menu, ArrowLeft, Search } from 'lucide-react';
+import { Menu, ArrowLeft, Shield, User, Terminal, Cpu } from 'lucide-react';
 import { View } from '../types';
 
-export const Navbar = ({ onMenuClick, view, onBack }: { onMenuClick: () => void, view: View, onBack: () => void }) => (
-  <nav className="fixed top-0 w-full z-50 bg-[#131313] dark:bg-[#131313] opacity-80 backdrop-blur-xl border-b border-[#45474a]/20">
-    <div className="flex justify-between items-center px-6 py-4 w-full">
-      <div className="flex items-center gap-4">
+export const Navbar = ({ 
+  onMenuClick, 
+  view, 
+  setView, 
+  onBack 
+}: { 
+  onMenuClick: () => void, 
+  view: View, 
+  setView: (view: View) => void, 
+  onBack: () => void 
+}) => (
+  <nav className="fixed top-0 w-full z-50 bg-[#131313]/90 backdrop-blur-xl border-b border-[#e9c349]/10 py-3">
+    <div className="flex justify-between items-center px-4 md:px-8 w-full">
+      <div className="flex items-center gap-6">
         {view !== 'home' && (
-          <button
+          <button 
             onClick={onBack}
-            className="text-[#e9c349] hover:scale-110 transition-transform cursor-pointer"
+            className="group flex items-center gap-2 text-[#e9c349] hover:text-white transition-all duration-300 pointer-events-auto"
           >
-            <ArrowLeft size={24} />
+            <div className="p-1.5 rounded-full border border-[#e9c349]/30 group-hover:border-[#e9c349] group-hover:bg-[#e9c349]/10 transition-all">
+              <ArrowLeft size={16} />
+            </div>
           </button>
         )}
-        <div className="flex items-center gap-3">
-          <span className="material-symbols-outlined text-[#e9c349]">shield</span>
-          <span className="text-lg font-bold text-[#e9c349] tracking-tighter font-headline uppercase tracking-widest">
-            ARMORY
-          </span>
+        <div 
+          onClick={() => setView('home')}
+          className="flex items-center gap-3 cursor-pointer group"
+        >
+          <div className="relative">
+            <Shield className="text-[#e9c349] w-6 h-6 group-hover:scale-110 transition-all duration-300 drop-shadow-[0_0_8px_rgba(233,195,73,0.5)]" />
+          </div>
+          <div className="flex flex-col">
+            <span className="text-lg font-bold text-[#e9c349] font-headline tracking-[0.2em] uppercase leading-none">
+              ARMORY
+            </span>
+            <span className="text-[8px] text-[#c0c7d1] font-headline tracking-[0.3em] font-bold opacity-40 uppercase mt-1">
+              Tactical Systems
+            </span>
+          </div>
         </div>
       </div>
-
-      <div className="hidden md:flex gap-8 items-center">
-        {view === 'home' && ['Armory', 'Handguns', 'Rifles', 'Shotguns', 'Gear'].map((item) => (
-          <a
-            key={item}
-            href="#"
-            className={`font-headline font-bold uppercase tracking-wider text-sm transition-colors duration-200 ${item === 'Armory' ? 'text-[#e9c349]' : 'text-[#c0c7d1] hover:text-[#e9c349]'}`}
+      
+      <div className="hidden lg:flex gap-1 items-center bg-[#1c1b1b] px-1.5 py-1 border border-white/5 rounded-full">
+        {[
+          { id: 'home', label: 'ARMORY' },
+          { id: 'vault', label: 'VAULT' },
+          { id: 'intel', label: 'INTEL' }
+        ].map((item) => (
+          <button 
+            key={item.id} 
+            onClick={() => item.id === 'home' && setView('home')}
+            className={`font-headline px-5 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${
+              (view === 'home' && item.id === 'home') 
+              ? 'bg-[#e9c349] text-[#131313] shadow-[0_0_20px_rgba(233,195,73,0.3)]' 
+              : 'text-[#c0c7d1] hover:text-[#e9c349] hover:bg-white/5'
+            }`}
           >
-            {item}
-          </a>
+            {item.label}
+          </button>
         ))}
-        {view === 'detail' && (
-          <span className="font-headline text-[10px] tracking-[0.2em] text-[#c0c7d1] opacity-50 uppercase tracking-widest">
-            LAT: 34.0522 N / LONG: 118.2437 W
-          </span>
-        )}
       </div>
 
-      <div className="flex items-center gap-4">
-        <button className="material-symbols-outlined text-[#c0c7d1] hover:text-[#e9c349] transition-colors duration-200">
-          settings_input_component
+      <div className="flex items-center gap-3">
+        <div className="hidden md:flex items-center gap-4 bg-[#1c1b1b] border border-white/5 px-4 py-1.5 rounded-sm">
+           <div className="flex items-center gap-2">
+              <div className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></div>
+              <span className="text-[9px] font-headline font-black text-emerald-500 tracking-wider uppercase opacity-80">Connected</span>
+           </div>
+           <div className="w-[1px] h-4 bg-white/10"></div>
+           <button 
+             onClick={() => setView('profile')}
+             className={`flex items-center gap-3 transition-all group ${view === 'profile' ? 'text-[#e9c349]' : 'text-[#c0c7d1] hover:text-white'}`}
+           >
+             <div className="text-right hidden sm:block">
+               <div className="text-[9px] font-headline font-black tracking-widest uppercase">ALPHA-ONE</div>
+               <div className="text-[7px] font-headline font-bold opacity-40 tracking-widest leading-none">LVL 5 OPERATOR</div>
+             </div>
+             <User size={18} className={view === 'profile' ? 'text-[#e9c349]' : 'group-hover:text-[#e9c349] transition-colors'} />
+           </button>
+        </div>
+
+        <button className="p-2 text-[#c0c7d1] hover:text-[#e9c349] transition-all">
+          <Terminal size={18} />
         </button>
-        <button
+
+        <button 
           onClick={onMenuClick}
-          className="text-[#e9c349] hover:scale-110 transition-transform cursor-pointer md:hidden"
+          className="text-[#e9c349] hover:scale-110 transition-transform cursor-pointer md:hidden p-2"
         >
           <Menu size={24} />
         </button>
