@@ -214,98 +214,93 @@ export const SplashScreen = ({ onComplete }: { onComplete: () => void }) => {
       </motion.div>
 
       {/* Main Content */}
-      <div className="relative z-10 flex flex-col items-center text-center">
-        <motion.div 
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.5 }}
-          className="inline-flex items-center gap-3 border border-gold/30 rounded-sm px-4 py-1.5 mb-6"
-        >
-          <div className="w-6 h-[1px] bg-gold" />
-          <span className="text-[10px] font-bold tracking-[0.4em] uppercase text-gold">Licensed Firearms Dealer</span>
-          <div className="w-6 h-[1px] bg-gold" />
-        </motion.div>
+      <div className="relative z-10 flex flex-col items-center text-center min-h-screen justify-between py-16 px-6">
+        {/* Top Section: Branding */}
+        <div className="flex flex-col items-center">
+          <motion.div 
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            className="inline-flex items-center gap-3 border border-gold/30 rounded-sm px-4 py-1.5 mb-6"
+          >
+            <div className="w-6 h-[1px] bg-gold" />
+            <span className="text-[10px] font-bold tracking-[0.4em] uppercase text-gold">Licensed Firearms Dealer</span>
+            <div className="w-6 h-[1px] bg-gold" />
+          </motion.div>
 
-        <motion.div 
-          initial={{ opacity: 0, scaleX: 1.4, scaleY: 0.6, letterSpacing: '0.25em' }}
-          animate={{ opacity: 1, scaleX: 1, scaleY: 1, letterSpacing: '0.04em' }}
-          transition={{ duration: 0.8, delay: 0.4, ease: [0.2, 0, 0.1, 1] }}
-          className="text-glitch font-bebas text-[clamp(5rem,14vw,11rem)] leading-[0.88] tracking-[0.04em] text-transparent bg-gradient-to-b from-[#f0e8d8] via-[#c8b890] to-[#8a6830] bg-clip-text"
-          data-text="ARMORY"
-        >
-          ARMORY
-        </motion.div>
+          <motion.div 
+            initial={{ opacity: 0, scaleX: 1.4, scaleY: 0.6, letterSpacing: '0.25em' }}
+            animate={{ opacity: 1, scaleX: 1, scaleY: 1, letterSpacing: '0.04em' }}
+            transition={{ duration: 0.8, delay: 0.4, ease: [0.2, 0, 0.1, 1] }}
+            className="text-glitch font-bebas text-[clamp(4rem,12vw,11rem)] leading-[0.88] tracking-[0.04em] text-transparent bg-gradient-to-b from-[#f0e8d8] via-[#c8b890] to-[#8a6830] bg-clip-text"
+            data-text="ARMORY"
+          >
+            ARMORY
+          </motion.div>
 
-        <motion.div 
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9 }}
-          className="text-[clamp(0.9rem,2.5vw,1.4rem)] font-light tracking-[0.5em] uppercase text-gold/60 mt-3"
-        >
-          Precision · Power · Trust
-        </motion.div>
+          <motion.div 
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.9 }}
+            className="text-[clamp(0.8rem,2vw,1.2rem)] font-light tracking-[0.5em] uppercase text-gold/60 mt-3"
+          >
+            Precision · Power · Trust
+          </motion.div>
+        </div>
 
-        <motion.div 
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.1 }}
-          className="flex items-center gap-4 my-6"
-        >
-          <div className="w-[120px] h-[1px] bg-gradient-to-r from-transparent via-gold/40 to-transparent" />
-          <div className="text-gold text-[10px] tracking-widest">⬡</div>
-          <div className="w-[120px] h-[1px] bg-gradient-to-r from-gold/40 via-gold/40 to-transparent" />
-        </motion.div>
+        {/* Bottom Section: Action & Progress */}
+        <div className="flex flex-col items-center w-full max-w-sm">
+          {/* Loader */}
+          <motion.div 
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.3 }}
+            className="relative w-full mb-8"
+          >
+            <div className="flex justify-between text-[10px] font-semibold tracking-[0.22em] uppercase text-gold/50 mb-2">
+              <span>System Initialization</span>
+              <span>{progress}%</span>
+            </div>
+            <div className="h-[2px] bg-white/5 relative overflow-hidden">
+              <div 
+                className="absolute top-0 left-0 h-full bg-gradient-to-r from-rust via-ember to-gold transition-[width] duration-300"
+                style={{ width: `${progress}%` }}
+              />
+              <div 
+                className="absolute top-[-3px] w-5 h-2 bg-[radial-gradient(circle,var(--color-fire)_0%,transparent_70%)] opacity-0 transition-[left] duration-300"
+                style={{ left: `${progress}%`, opacity: progress > 0 && progress < 100 ? 1 : 0 }}
+              />
+            </div>
+            <div className="status-text mt-4 text-[9px] font-semibold tracking-[0.35em] uppercase text-gold/45 h-4">
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={statusIndex}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.3 }}
+                >
+                  {statuses[statusIndex]}
+                </motion.span>
+              </AnimatePresence>
+            </div>
+          </motion.div>
 
-        {/* Loader */}
-        <motion.div 
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.3 }}
-          className="relative w-[min(320px,70vw)]"
-        >
-          <div className="flex justify-between text-[10px] font-semibold tracking-[0.22em] uppercase text-gold/50 mb-2">
-            <span>Initializing</span>
-            <span>{progress}%</span>
-          </div>
-          <div className="h-[2px] bg-white/5 relative overflow-hidden">
-            <div 
-              className="absolute top-0 left-0 h-full bg-gradient-to-r from-rust via-ember to-gold transition-[width] duration-300"
-              style={{ width: `${progress}%` }}
-            />
-            <div 
-              className="absolute top-[-3px] w-5 h-2 bg-[radial-gradient(circle,var(--color-fire)_0%,transparent_70%)] opacity-0 transition-[left] duration-300"
-              style={{ left: `${progress}%`, opacity: progress > 0 && progress < 100 ? 1 : 0 }}
-            />
-          </div>
-          <div className="status-text mt-5 text-[10px] font-semibold tracking-[0.35em] uppercase text-gold/45 h-4">
-            <AnimatePresence mode="wait">
-              <motion.span
-                key={statusIndex}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                exit={{ opacity: 0 }}
-                transition={{ duration: 0.3 }}
-              >
-                {statuses[statusIndex]}
-              </motion.span>
-            </AnimatePresence>
-          </div>
-        </motion.div>
-
-        {/* Enter Button */}
-        <motion.button 
-          initial={{ opacity: 0, y: 16 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 3.8 }}
-          onClick={handleEnter}
-          className="group relative mt-10 inline-flex items-center gap-3 px-10 py-3.5 border border-gold/40 bg-transparent text-gold font-bold text-sm tracking-[0.4em] uppercase overflow-hidden transition-colors hover:text-white hover:border-gold/80 hover:shadow-[0_0_30px_rgba(184,146,42,0.15),inset_0_0_30px_rgba(184,146,42,0.05)]"
-        >
-          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/10 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-          Enter Armory
-          <svg className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" viewBox="0 0 14 14" fill="none">
-            <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
-          </svg>
-        </motion.button>
+          {/* Enter Button */}
+          <motion.button 
+            initial={{ opacity: 0, y: 16 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 3.8 }}
+            onClick={handleEnter}
+            className="group relative inline-flex items-center gap-3 px-10 py-3.5 border border-gold/40 bg-[#131313]/40 backdrop-blur-md text-gold font-bold text-sm tracking-[0.4em] uppercase overflow-hidden transition-all hover:text-white hover:border-gold/80 hover:shadow-[0_0_30px_rgba(184,146,42,0.2)]"
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-gold/15 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+            Enter Armory
+            <svg className="w-3.5 h-3.5 transition-transform group-hover:translate-x-1" viewBox="0 0 14 14" fill="none">
+              <path d="M1 7h12M8 2l5 5-5 5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </motion.button>
+        </div>
       </div>
 
       {/* Bottom Info */}
