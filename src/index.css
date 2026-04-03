@@ -1,0 +1,193 @@
+@import "tailwindcss";
+@import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@300;400;600;700;900&family=Barlow:wght@300;400&family=Space+Grotesk:wght@300;400;500;600;700;900&family=Inter:wght@300;400;500;600;700&display=swap');
+
+@theme {
+  --font-headline: "Space Grotesk", sans-serif;
+  --font-sans: "Inter", sans-serif;
+  --font-bebas: "Bebas Neue", sans-serif;
+  --font-barlow: "Barlow Condensed", sans-serif;
+  
+  --color-primary: #e9c349;
+  --color-on-primary: #3c2f00;
+  --color-primary-container: #382b00;
+  --color-surface: #131313;
+  --color-surface-container: #201f1f;
+  --color-surface-container-low: #1c1b1b;
+  --color-surface-container-high: #2a2a2a;
+  --color-surface-container-highest: #353534;
+  --color-surface-container-lowest: #0e0e0e;
+  --color-on-surface: #e5e2e1;
+  --color-on-surface-variant: #c6c6cb;
+  --color-secondary: #c0c7d1;
+  --color-outline: #909095;
+  --color-outline-variant: #45474a;
+  --color-background: #131313;
+  --color-on-background: #e5e2e1;
+
+  --color-ink: #0a0804;
+  --color-iron: #1a1612;
+  --color-steel: #2c2620;
+  --color-rust: #8B3A1A;
+  --color-ember: #C84B11;
+  --color-fire: #E8651A;
+  --color-brass: #B8922A;
+  --color-gold: #D4A843;
+}
+
+@layer base {
+  body {
+    @apply bg-background text-on-background font-sans antialiased;
+  }
+}
+
+@layer utilities {
+  .bg-grain {
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 180px 180px;
+    animation: grainMove 0.8s steps(2) infinite;
+  }
+
+  .scanlines {
+    background: repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 2px,
+      rgba(0,0,0,.08) 2px,
+      rgba(0,0,0,.08) 4px
+    );
+  }
+
+  .text-glitch {
+    position: relative;
+  }
+
+  .text-glitch::before,
+  .text-glitch::after {
+    content: attr(data-text);
+    position: absolute;
+    inset: 0;
+    background: inherit;
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    opacity: 0;
+  }
+
+  .text-glitch::before {
+    animation: glitchA 5s infinite 2s;
+    clip-path: polygon(0 20%, 100% 20%, 100% 40%, 0 40%);
+  }
+
+  .text-glitch::after {
+    animation: glitchB 5s infinite 2.1s;
+    clip-path: polygon(0 60%, 100% 60%, 100% 80%, 0 80%);
+  }
+
+  .glass-nav {
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+  }
+
+  .mechanical-slide {
+    transition: all 0.4s cubic-bezier(0.2, 1, 0.3, 1);
+  }
+
+  .glass-header {
+    backdrop-filter: blur(12px);
+    background-color: rgba(19, 19, 19, 0.8);
+  }
+}
+
+@keyframes grainMove {
+  0%   { transform: translate(0,0); }
+  25%  { transform: translate(-12px, 8px); }
+  50%  { transform: translate(6px, -10px); }
+  75%  { transform: translate(-4px, 14px); }
+  100% { transform: translate(10px, -6px); }
+}
+
+@keyframes glitchA {
+  0%, 94%, 100% { opacity: 0; transform: none; }
+  95% { opacity: 0.7; transform: translate(-3px, 1px); filter: hue-rotate(30deg); }
+  97% { opacity: 0.4; transform: translate(3px, -1px); }
+  98% { opacity: 0; }
+}
+
+@keyframes glitchB {
+  0%, 94%, 100% { opacity: 0; transform: none; }
+  95% { opacity: 0.5; transform: translate(4px, 2px); filter: hue-rotate(-20deg); }
+  97% { opacity: 0.3; transform: translate(-2px, -2px); }
+  98% { opacity: 0; }
+}
+
+@keyframes smokeDrift {
+  0%   { opacity: 0; transform: translateY(0) scale(0.6) rotate(0deg); }
+  10%  { opacity: 1; }
+  80%  { opacity: 0.4; }
+  100% { opacity: 0; transform: translateY(-70vh) scale(1.8) rotate(40deg); }
+}
+
+@keyframes flashBurst {
+  0%   { opacity: 0; transform: translate(-50%,-50%) scale(0.1); }
+  40%  { opacity: 1; transform: translate(-50%,-50%) scale(1.2); }
+  100% { opacity: 0; transform: translate(-50%,-50%) scale(1.6); }
+}
+
+@keyframes teleBarAnim {
+  0%, 100% { transform: scaleX(0.2); transform-origin: left; }
+  50% { transform: scaleX(0.8); }
+}
+
+@keyframes crosshairSpin {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes reticleExpand {
+  from { opacity: 0; transform: translate(-50%,-50%) scale(0.3); }
+  to   { opacity: 1; transform: translate(-50%,-50%) scale(1); }
+}
+
+.animate-smoke {
+  animation: smokeDrift linear infinite;
+}
+
+.animate-flash {
+  animation: flashBurst 0.12s ease-out 0.05s forwards;
+}
+
+.animate-tele-bar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(184,146,42,0.5);
+  animation: teleBarAnim 3s ease-in-out infinite;
+}
+
+.animate-crosshair-spin {
+  animation: crosshairSpin 12s linear infinite;
+}
+
+.animate-reticle-expand {
+  animation: reticleExpand 3s ease-out both;
+}
+
+.scan-line {
+  position: absolute;
+  width: 100%;
+  height: 2px;
+  background: #e9c349;
+  box-shadow: 0 0 15px #e9c349;
+  top: 0;
+  left: 0;
+  animation: scanning 3s linear infinite;
+}
+
+.text-glow {
+  text-shadow: 0 0 10px rgba(233, 195, 73, 0.5);
+}
+
+@keyframes scanning {
+  0% { top: 0%; }
+  50% { top: 100%; }
+  100% { top: 0%; }
+}
