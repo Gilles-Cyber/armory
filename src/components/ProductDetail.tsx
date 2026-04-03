@@ -1,3 +1,4 @@
+import React, { useState } from 'react';
 import { motion } from 'motion/react';
 import { Lock, MapPin, Star } from 'lucide-react';
 import { Product } from '../data/products';
@@ -32,7 +33,26 @@ export const ProductDetail = ({
   product: Product,
   isFavorite: boolean,
   onToggleFavorite: () => void
-}) => (
+}) => {
+  const [newReviews, setNewReviews] = useState<{text: string, author: string, initials: string, highlight?: boolean}[]>([]);
+  const [reviewText, setReviewText] = useState('');
+  
+  const handleSubmitReview = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!reviewText.trim()) return;
+    
+    setNewReviews([...newReviews, {
+      text: `"${reviewText}"`,
+      author: 'Current Operator',
+      initials: 'C.O.',
+      highlight: false
+    }]);
+    setReviewText('');
+  };
+
+  const allReviews = [...product.reviews, ...newReviews];
+
+  return (
   <motion.main 
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
@@ -77,7 +97,7 @@ export const ProductDetail = ({
           <h2 className="text-5xl lg:text-7xl font-bold font-headline tracking-tighter leading-none uppercase">{product.title}</h2>
           <p className="text-primary text-3xl font-headline font-light tracking-tight">{product.price}</p>
         </div>
-        {/* ... */}
+        
         <p className="text-secondary leading-relaxed text-sm max-w-md">
           {product.description}
         </p>
@@ -112,7 +132,7 @@ export const ProductDetail = ({
         Field Reports <span className="h-px flex-grow bg-outline-variant/30"></span>
       </h3>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        {product.reviews.map((review, i) => (
+        {allReviews.map((review, i) => (
           <div key={i} className={`bg-surface-container-low p-8 flex flex-col justify-between hover:bg-surface-container-high transition-colors ${review.highlight ? 'md:scale-105 border border-primary/20' : ''}`}>
             <div className="space-y-4">
               <div className="flex text-primary">
@@ -129,6 +149,29 @@ export const ProductDetail = ({
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Add Review Form */}
+      <div className="mt-12 bg-surface-container-highest p-8 md:p-10 max-w-3xl border border-white/5">
+        <h4 className="text-xl font-headline font-bold uppercase mb-6 tracking-widest text-[#e9c349] flex items-center gap-3">
+          <span className="w-1.5 h-1.5 rounded-full bg-[#e9c349]"></span>
+          Submit Field Report
+        </h4>
+        <form onSubmit={handleSubmitReview} className="flex flex-col gap-4">
+          <textarea 
+            value={reviewText}
+            onChange={(e) => setReviewText(e.target.value)}
+            placeholder="Log your operational feedback..."
+            className="w-full bg-[#131313] border border-white/10 p-5 text-white placeholder-white/30 focus:outline-none focus:border-[#e9c349] transition-colors resize-none h-32 font-light text-sm"
+          />
+          <button 
+            type="submit"
+            disabled={!reviewText.trim()}
+            className="self-start px-8 py-3 bg-[#e9c349]/10 text-[#e9c349] border border-[#e9c349]/50 font-headline font-bold text-xs tracking-widest uppercase hover:bg-[#e9c349] hover:text-[#131313] transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            Submit Report
+          </button>
+        </form>
       </div>
     </section>
 
@@ -159,4 +202,5 @@ export const ProductDetail = ({
       </div>
     </section>
   </motion.main>
-);
+  );
+};
