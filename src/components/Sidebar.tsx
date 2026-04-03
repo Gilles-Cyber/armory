@@ -1,5 +1,5 @@
 import { motion, AnimatePresence } from 'motion/react';
-import { User, Lock, Headset, Cpu, History } from 'lucide-react';
+import { User, Target, Headset, Cpu, History } from 'lucide-react';
 
 export const Sidebar = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => void }) => (
   <AnimatePresence>
@@ -32,7 +32,7 @@ export const Sidebar = ({ isOpen, onClose }: { isOpen: boolean, onClose: () => v
           
           <div className="flex-1 py-8">
             {[
-              { icon: Lock, label: 'Secure Vault' },
+              { icon: Target, label: 'Marked Ordnance' },
               { icon: Headset, label: 'Expert Support' },
               { icon: Cpu, label: 'Technical Specs' },
               { icon: History, label: 'Order History' }

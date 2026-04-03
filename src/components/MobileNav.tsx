@@ -1,30 +1,32 @@
-import { Home, Crosshair, Target, Zap, Shield } from 'lucide-react';
+import { Shield, Target, User, BarChart2 } from 'lucide-react';
+import { motion } from 'motion/react';
 import { View } from '../types';
 
 export const MobileNav = ({ view, setView }: { view: View, setView: (v: View) => void }) => (
-  <nav className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 bg-[#131313] dark:bg-[#131313] border-t border-[#45474a]/20 h-20">
+  <nav className="fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 bg-[#131313]/95 backdrop-blur-xl border-t border-white/5 h-20 shadow-[0_-10px_30px_rgba(0,0,0,0.5)]">
     {[
-      { icon: 'shield', label: 'ARMORY', id: 'home' },
-      { icon: 'lock', label: 'VAULT', id: 'vault' },
-      { icon: 'person', label: 'PROFILE', id: 'profile' },
-      { icon: 'analytics', label: 'INTEL', id: 'intel' }
+      { icon: Shield, label: 'ARMORY', id: 'home' },
+      { icon: Target, label: 'FAVORITES', id: 'favorites' },
+      { icon: User, label: 'PROFILE', id: 'profile' },
+      { icon: BarChart2, label: 'INTEL', id: 'intel' }
     ].map((item, i) => (
-      <a 
+      <button 
         key={i} 
-        href="#" 
-        onClick={(e) => {
-          e.preventDefault();
-          if (item.id === 'home' || item.id === 'profile') {
-            setView(item.id as View);
-          }
-        }}
-        className={`flex flex-col items-center justify-center pt-2 transition-all active:scale-95 ${view === item.id ? 'text-[#e9c349] border-t-2 border-[#e9c349] -mt-[2px]' : 'text-[#c0c7d1] hover:bg-[#1c1b1b]'}`}
+        onClick={() => setView(item.id as View)}
+        className={`flex flex-col items-center justify-center pt-2 transition-all active:scale-95 group relative ${view === item.id ? 'text-[#e9c349]' : 'text-[#c0c7d1]/50'}`}
       >
-        <span className="material-symbols-outlined" style={{ fontVariationSettings: view === item.id ? "'FILL' 1" : "'FILL' 0" }}>
-          {item.icon}
-        </span>
-        <span className="font-headline font-bold text-[10px] uppercase tracking-[0.1em]">{item.label}</span>
-      </a>
+        {view === item.id && (
+          <motion.div 
+            layoutId="mobile-nav-indicator"
+            className="absolute -top-2 w-8 h-1 bg-[#e9c349] rounded-full shadow-[0_0_10px_rgba(233,195,73,0.5)]"
+          />
+        )}
+        <item.icon 
+          size={20} 
+          className={`mb-1 transition-all duration-300 ${view === item.id ? 'scale-110' : 'group-hover:text-white'}`} 
+        />
+        <span className="font-headline font-black text-[9px] uppercase tracking-[0.2em]">{item.label}</span>
+      </button>
     ))}
   </nav>
 );
