@@ -17,14 +17,30 @@ export default function App() {
   const [currentView, setCurrentView] = useState<View>('home');
   const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
-  const [favorites, setFavorites] = useState<string[]>([]);
+  const [favorites, setFavorites] = useState<string[]>(() => {
+    const saved = localStorage.getItem('armory_favorites');
+    return saved ? JSON.parse(saved) : [];
+  });
+  const [notification, setNotification] = useState<{ message: string, active: boolean } | null>(null);
+
+  useEffect(() => {
+    localStorage.setItem('armory_favorites', JSON.stringify(favorites));
+  }, [favorites]);
 
   const toggleFavorite = (productId: string) => {
+    const isAdding = !favorites.includes(productId);
+    const product = products.find(p => p.id === productId);
+    
     setFavorites(prev => 
-      prev.includes(productId) 
-        ? prev.filter(id => id !== productId) 
-        : [...prev, productId]
+      isAdding ? [...prev, productId] : prev.filter(id => id !== productId)
     );
+
+    setNotification({
+      message: isAdding ? `${product?.title.toUpperCase()} MARKED` : `${product?.title.toUpperCase()} UNMARKED`,
+      active: true
+    });
+
+    setTimeout(() => setNotification(null), 3000);
   };
 
   // Prevent scroll when sidebar is open or loading
@@ -61,6 +77,7 @@ export default function App() {
         view={currentView}
         setView={setCurrentView}
         onBack={() => setCurrentView('home')}
+        favoritesCount={favorites.length}
       />
       <Sidebar isOpen={isSidebarOpen} onClose={() => setIsSidebarOpen(false)} />
 
@@ -99,7 +116,29 @@ export default function App() {
       </AnimatePresence>
 
       <Footer />
-      <MobileNav view={currentView} setView={setCurrentView} />
+      <MobileNav view={currentView} setView={setCurrentView} favoritesCount={favorites.length} />
+
+      {/* Tactical Notification Toast */}
+      <AnimatePresence>
+        {notification && (
+          <motion.div 
+            initial={{ opacity: 0, y: 50, x: '-50%' }}
+            animate={{ opacity: 1, y: 0, x: '-50%' }}
+            exit={{ opacity: 0, y: 20, x: '-50%', scale: 0.95 }}
+            className="fixed bottom-24 left-1/2 z-[100] flex items-center gap-3 px-6 py-3 bg-[#131313]/90 backdrop-blur-xl border border-gold/30 rounded-sm shadow-[0_10px_40px_rgba(0,0,0,0.6)]"
+          >
+            <div className="w-1.5 h-1.5 rounded-full bg-gold animate-pulse" />
+            <span className="font-headline font-black text-[10px] uppercase tracking-[0.25em] text-gold whitespace-nowrap">
+              {notification.message}
+            </span>
+            <div className="ml-4 flex gap-1">
+              {[1, 2, 3].map(i => (
+                <div key={i} className="w-3 h-0.5 bg-gold/20" />
+              ))}
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       {/* Decorative Corner Elements */}
       <div className="fixed top-20 left-0 p-2 opacity-20 pointer-events-none hidden lg:block z-40">
