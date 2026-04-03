@@ -8,24 +8,55 @@ interface ProductCardProps {
   image: string;
   badge?: string;
   onClick?: () => void;
+  isFavorite?: boolean;
+  onToggleFavorite?: () => void;
 }
 
-export const ProductCard: React.FC<ProductCardProps> = ({ title, price, specs, image, badge, onClick }) => {
-  const [isFavorite, setIsFavorite] = useState(false);
+const BulletIcon = ({ filled }: { filled: boolean }) => (
+  <svg 
+    width="22" 
+    height="22" 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg"
+    className={`transition-all duration-300 ${filled ? 'text-[#e9c349] drop-shadow-[0_0_10px_rgba(233,195,73,0.5)]' : 'text-[#c0c7d1]/40'}`}
+  >
+    <path 
+      d="M8 20V12C8 8.5 9.5 4.5 12 2.5C14.5 4.5 16 8.5 16 12V20H8Z" 
+      fill={filled ? "currentColor" : "none"} 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    />
+    <path d="M8 18H16" stroke="currentColor" strokeWidth="1.5" opacity="0.3" />
+    <path d="M8 22H16" stroke="currentColor" strokeWidth="2.5" />
+  </svg>
+);
 
+export const ProductCard: React.FC<ProductCardProps> = ({ 
+  title, 
+  price, 
+  specs, 
+  image, 
+  badge, 
+  onClick,
+  isFavorite,
+  onToggleFavorite
+}) => {
   return (
     <div 
       onClick={onClick}
-      className="bg-surface-container-low p-8 group transition-all duration-300 hover:bg-surface-container-high relative cursor-pointer"
+      className="bg-[#1c1b1b] p-8 group transition-all duration-300 hover:bg-[#252424] border border-white/5 relative cursor-pointer"
     >
       <button 
         onClick={(e) => {
           e.stopPropagation();
-          setIsFavorite(!isFavorite);
+          onToggleFavorite?.();
         }}
-        className="absolute top-6 right-6 z-10 p-2 text-secondary/40 hover:text-primary transition-colors"
+        className="absolute top-6 right-6 z-10 p-2 transition-transform active:scale-90"
       >
-        <Circle size={16} fill={isFavorite ? "currentColor" : "none"} strokeWidth={2} />
+        <BulletIcon filled={!!isFavorite} />
       </button>
       {badge && (
       <span className="absolute top-6 left-6 text-[10px] text-primary border border-primary/30 px-2 py-1 uppercase tracking-widest font-bold">

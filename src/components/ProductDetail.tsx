@@ -2,7 +2,37 @@ import { motion } from 'motion/react';
 import { Lock, MapPin, Star } from 'lucide-react';
 import { Product } from '../data/products';
 
-export const ProductDetail = ({ product }: { product: Product }) => (
+const BulletIcon = ({ filled }: { filled: boolean }) => (
+  <svg 
+    width="22" 
+    height="22" 
+    viewBox="0 0 24 24" 
+    fill="none" 
+    xmlns="http://www.w3.org/2000/svg"
+    className={`transition-all duration-300 ${filled ? 'text-[#e9c349] drop-shadow-[0_0_10px_rgba(233,195,73,0.5)]' : 'text-[#c0c7d1]/40'}`}
+  >
+    <path 
+      d="M8 20V12C8 8.5 9.5 4.5 12 2.5C14.5 4.5 16 8.5 16 12V20H8Z" 
+      fill={filled ? "currentColor" : "none"} 
+      stroke="currentColor" 
+      strokeWidth="2" 
+      strokeLinecap="round" 
+      strokeLinejoin="round"
+    />
+    <path d="M8 18H16" stroke="currentColor" strokeWidth="1.5" opacity="0.3" />
+    <path d="M8 22H16" stroke="currentColor" strokeWidth="2.5" />
+  </svg>
+);
+
+export const ProductDetail = ({ 
+  product,
+  isFavorite,
+  onToggleFavorite
+}: { 
+  product: Product,
+  isFavorite: boolean,
+  onToggleFavorite: () => void
+}) => (
   <motion.main 
     initial={{ opacity: 0 }}
     animate={{ opacity: 1 }}
@@ -27,20 +57,27 @@ export const ProductDetail = ({ product }: { product: Product }) => (
           referrerPolicy="no-referrer"
         />
       </div>
-
-      {/* Product Info Area */}
       <div className="w-full lg:w-2/5 flex flex-col gap-8">
         <div className="space-y-2">
-          <div className="flex items-center gap-3">
-            {product.badge && <span className="bg-primary-container text-primary text-[10px] font-bold px-2 py-1 tracking-widest font-headline uppercase">{product.badge}</span>}
-            <span className="text-secondary text-[10px] font-bold tracking-widest font-headline flex items-center gap-1 uppercase">
-              <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
-              In Stock
-            </span>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center gap-3">
+              {product.badge && <span className="bg-primary-container text-primary text-[10px] font-bold px-2 py-1 tracking-widest font-headline uppercase">{product.badge}</span>}
+              <span className="text-secondary text-[10px] font-bold tracking-widest font-headline flex items-center gap-1 uppercase">
+                <span className="w-1.5 h-1.5 rounded-full bg-green-500 animate-pulse"></span>
+                In Stock
+              </span>
+            </div>
+            <button 
+              onClick={onToggleFavorite}
+              className={`p-3 border transition-all duration-300 ${isFavorite ? 'border-[#e9c349]/50 bg-[#e9c349]/10' : 'border-white/5 bg-white/5 hover:border-white/20'}`}
+            >
+              <BulletIcon filled={isFavorite} />
+            </button>
           </div>
           <h2 className="text-5xl lg:text-7xl font-bold font-headline tracking-tighter leading-none uppercase">{product.title}</h2>
           <p className="text-primary text-3xl font-headline font-light tracking-tight">{product.price}</p>
         </div>
+        {/* ... */}
         <p className="text-secondary leading-relaxed text-sm max-w-md">
           {product.description}
         </p>
@@ -48,7 +85,7 @@ export const ProductDetail = ({ product }: { product: Product }) => (
         {/* Technical Specs Grid */}
         <div className="grid grid-cols-2 gap-px bg-outline-variant/20">
           {product.specs.map((spec, i) => (
-            <div key={i} className="bg-surface-container-low p-4">
+            <div key={i} className="bg-[#1c1b1b] p-4">
               <p className="text-[10px] text-outline font-headline tracking-[0.2em] uppercase mb-1">{spec.label}</p>
               <p className="font-headline font-bold text-lg uppercase">{spec.value}</p>
             </div>
@@ -59,7 +96,7 @@ export const ProductDetail = ({ product }: { product: Product }) => (
         <div className="flex flex-col gap-4 mt-4">
           <button className="metallic-gradient text-on-primary font-headline font-bold py-5 tracking-widest text-sm hover:brightness-110 active:scale-[0.98] transition-all flex items-center justify-center gap-3 cursor-pointer">
             <Lock size={18} fill="currentColor" />
-            ADD TO VAULT
+            SECURE ACQUISITION
           </button>
           <button className="border border-outline-variant hover:border-primary text-secondary hover:text-primary font-headline font-bold py-5 tracking-widest text-sm transition-all flex items-center justify-center gap-3 cursor-pointer">
             <MapPin size={18} />

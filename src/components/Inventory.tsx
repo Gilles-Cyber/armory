@@ -1,13 +1,27 @@
 import { ChevronLeft, ChevronRight } from 'lucide-react';
 import { ProductCard } from './ProductCard';
-import { products } from '../data/products';
+import { Product } from '../data/products';
 
-export const Inventory = ({ onProductClick }: { onProductClick: (productId: string) => void }) => (
+export const Inventory = ({ 
+  onProductClick, 
+  products, 
+  favorites, 
+  onToggleFavorite,
+  title = "Current Inventory",
+  subtitle = "New Arrivals"
+}: { 
+  onProductClick: (productId: string) => void,
+  products: Product[],
+  favorites: string[],
+  onToggleFavorite: (productId: string) => void,
+  title?: string,
+  subtitle?: string
+}) => (
   <section className="py-24 px-6 md:px-20 bg-surface">
     <div className="flex justify-between items-end mb-16">
       <div>
-        <span className="text-primary text-xs font-bold tracking-[0.3em] uppercase block mb-2">New Arrivals</span>
-        <h2 className="text-4xl md:text-5xl font-black font-headline uppercase tracking-tighter">Current Inventory</h2>
+        <span className="text-primary text-xs font-bold tracking-[0.3em] uppercase block mb-2">{subtitle}</span>
+        <h2 className="text-4xl md:text-5xl font-black font-headline uppercase tracking-tighter">{title}</h2>
       </div>
       <div className="flex gap-4">
         <button className="w-12 h-12 border border-outline-variant/30 flex items-center justify-center text-on-surface hover:bg-surface-container-high transition-all cursor-pointer">
@@ -26,6 +40,8 @@ export const Inventory = ({ onProductClick }: { onProductClick: (productId: stri
           title={product.title} 
           price={product.price} 
           onClick={() => onProductClick(product.id)}
+          isFavorite={favorites.includes(product.id)}
+          onToggleFavorite={() => onToggleFavorite(product.id)}
           specs={product.shortSpecs} 
           image={product.image} 
           badge={product.badge}

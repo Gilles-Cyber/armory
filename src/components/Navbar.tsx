@@ -46,14 +46,14 @@ export const Navbar = ({
       <div className="hidden lg:flex gap-1 items-center bg-[#1c1b1b] px-1.5 py-1 border border-white/5 rounded-full">
         {[
           { id: 'home', label: 'ARMORY' },
-          { id: 'vault', label: 'VAULT' },
+          { id: 'favorites', label: 'FAVORITES' },
           { id: 'intel', label: 'INTEL' }
         ].map((item) => (
           <button 
             key={item.id} 
-            onClick={() => item.id === 'home' && setView('home')}
+            onClick={() => setView(item.id as View)}
             className={`font-headline px-5 py-1.5 rounded-full text-[10px] font-black uppercase tracking-[0.2em] transition-all duration-300 ${
-              (view === 'home' && item.id === 'home') 
+              (view === item.id) 
               ? 'bg-[#e9c349] text-[#131313] shadow-[0_0_20px_rgba(233,195,73,0.3)]' 
               : 'text-[#c0c7d1] hover:text-[#e9c349] hover:bg-white/5'
             }`}

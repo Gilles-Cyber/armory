@@ -4,7 +4,17 @@ import { Categories } from '../components/Categories';
 import { Inventory } from '../components/Inventory';
 import { TrustSection } from '../components/TrustSection';
 
-export const Home = ({ onProductClick }: { onProductClick: (productId: string) => void }) => (
+import { products } from '../data/products';
+
+export const Home = ({ 
+  onProductClick, 
+  favorites, 
+  onToggleFavorite 
+}: { 
+  onProductClick: (productId: string) => void,
+  favorites: string[],
+  onToggleFavorite: (productId: string) => void
+}) => (
   <motion.main 
     key="home"
     initial={{ opacity: 0 }}
@@ -14,7 +24,12 @@ export const Home = ({ onProductClick }: { onProductClick: (productId: string) =
   >
     <Hero />
     <Categories />
-    <Inventory onProductClick={onProductClick} />
+    <Inventory 
+      onProductClick={onProductClick} 
+      products={products}
+      favorites={favorites}
+      onToggleFavorite={onToggleFavorite}
+    />
     <TrustSection />
   </motion.main>
 );
